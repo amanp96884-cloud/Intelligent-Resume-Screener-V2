@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enterprise ATS | Dynamic Batch Screener</title>
+    <style>
+        :root { --brand-dark: #0F172A; --brand-primary: #2563EB; --bg-color: #F1F5F9; --surface: #FFFFFF; --border: #E2E8F0; --text-main: #334155; --text-muted: #64748B; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .navbar { width: 100%; background-color: var(--brand-dark); color: white; padding: 12px 24px; box-sizing: border-box; font-size: 0.9rem; font-weight: 500; }
+        .app-container { width: 100%; max-width: 900px; margin-top: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 50px; }
+        .panel-header { background-color: #F8FAFC; border-bottom: 1px solid var(--border); padding: 16px 24px; font-size: 1.1rem; font-weight: 600; color: var(--brand-dark); }
+        .panel-body { padding: 24px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); text-transform: uppercase; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; box-sizing: border-box; font-size: 0.9rem; font-family: inherit; }
+        input[type="text"]:focus { outline: none; border-color: var(--brand-primary); }
+
+        .file-drop-zone { border: 1px dashed #94A3B8; background-color: #F8FAFC; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 24px; }
+
+        .btn { background-color: var(--brand-primary); color: white; border: none; padding: 10px 16px; font-size: 0.9rem; font-weight: 500; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn:hover { background-color: #1D4ED8; }
+        .btn:disabled { background-color: #94A3B8; cursor: not-allowed; }
+
+        #leaderboardSection { display: none; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background-color: #F8FAFC; padding: 12px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+        td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+        .rank-cell { font-weight: 700; color: var(--brand-dark); font-size: 1.1rem; text-align: center; width: 50px; }
+        .name-cell { font-weight: 600; color: var(--brand-dark); }
+        .score-cell { font-weight: 700; font-size: 1.1rem; width: 80px; text-align: right; }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { padding: 3px 8px; font-size: 0.75rem; font-weight: 500; border-radius: 3px; border: 1px solid; }
+        .tag-success { background-color: #F0FDF4; color: #166534; border-color: #BBF7D0; }
+        .tag-danger { background-color: #FEF2F2; color: #991B1B; border-color: #FECACA; }
+        .loading-text { text-align: center; color: var(--text-muted); font-style: italic; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">Internal Systems | Dynamic Evaluation Module</div>
+
+<div class="app-container">
+    <div class="panel-header">Create Job Profile & Analyze</div>
+
+    <div class="panel-body">
+        <!-- New Input Fields for Dynamic Skills -->
+        <div class="form-group">
+            <label class="form-label">Required Skills (Comma-separated)</label>
+            <input type="text" id="reqInput" placeholder="e.g. Java, SQL, Data Structures, OOP">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Preferred Skills (Comma-separated)</label>
+            <input type="text" id="prefInput" placeholder="e.g. Docker, Git, Spring Boot">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Select Resumes (.PDF)</label>
+            <div class="file-drop-zone">
+                <input type="file" id="pdfUpload" accept=".pdf" multiple>
+            </div>
+        </div>
+
+        <button class="btn" id="analyzeBtn" onclick="processBatch()">Run Batch Analysis</button>
+        <p id="loadingStatus" class="loading-text">Processing documents... please wait.</p>
+
+        <div id="leaderboardSection">
+            <h3 style="margin-bottom: 0; color: var(--brand-dark);">Candidate Leaderboard</h3>
+            <table id="leaderboardTable">
+                <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Candidate</th>
+                    <th>Score</th>
+                    <th>Verified Competencies</th>
+                    <th>Missing Requirements</th>
+                </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function processBatch() {
+        const fileInput = document.getElementById('pdfUpload');
+        const reqSkills = document.getElementById('reqInput').value;
+        const prefSkills = document.getElementById('prefInput').value;
+        const btn = document.getElementById('analyzeBtn');
+        const status = document.getElementById('loadingStatus');
+        const leaderboard = document.getElementById('leaderboardSection');
+        const tableBody = document.getElementById('tableBody');
+
+        const files = fileInput.files;
+        if (files.length === 0) {
+            alert("System Alert: No documents selected.");
+            return;
+        }
+
+        btn.disabled = true;
+        status.style.display = "block";
+        leaderboard.style.display = "none";
+        tableBody.innerHTML = "";
+
+        try {
+            const promises = Array.from(files).map(async (file) => {
+                const formData = new FormData();
+                formData.append("file", file);
+                // Append the dynamic skills typed by the user to the web request
+                formData.append("required", reqSkills);
+                formData.append("preferred", prefSkills);
+
+                const response = await fetch("http://localhost:8080/api/screen", {
+                    method: "POST",
+                    body: formData
+                });
+                return await response.json();
+            });
+
+            const results = await Promise.all(promises);
+            results.sort((a, b) => b.finalScore - a.finalScore);
+
+            results.forEach((data, index) => {
+                const score = Math.round(data.finalScore);
+                let scoreColor = score >= 70 ? "#166534" : (score >= 40 ? "#9A3412" : "#EF4444");
+
+                const matchedHTML = data.matchedSkills.map(s => `<span class="tag tag-success">${s}</span>`).join('');
+                const missingHTML = data.missingSkills.map(s => `<span class="tag tag-danger">${s}</span>`).join('');
+
+                tableBody.innerHTML += `
+                    <tr>
+                        <td class="rank-cell">#${index + 1}</td>
+                        <td class="name-cell">${data.candidateName}</td>
+                        <td class="score-cell" style="color: ${scoreColor}">${score}%</td>
+                        <td><div class="tag-list">${matchedHTML || '-'}</div></td>
+                        <td><div class="tag-list">${missingHTML || '-'}</div></td>
+                    </tr>
+                `;
+            });
+
+            leaderboard.style.display = "block";
+
+        } catch (error) {
+            alert("Processing Error: Ensure your Spring Boot server is running.");
+        } finally {
+            btn.disabled = false;
+            status.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
