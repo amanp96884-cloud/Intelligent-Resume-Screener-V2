@@ -24,8 +24,8 @@ public class ScoringEngine {
         // 🚀 THE MAGIC REVEAL: Print exactly what the AI found autonomously
         System.out.println("🤖 AI autonomously discovered these skills for " + fileName + ": " + aiFoundSkills);
 
-        // Convert found skills to lowercase for easier matching
-        List<String> foundLower = aiFoundSkills.stream()
+        // Convert found skills to lowercase for easier matching (Parallelized for speed)
+        List<String> foundLower = aiFoundSkills.parallelStream()
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
@@ -34,7 +34,7 @@ public class ScoringEngine {
 
         // 2. Cross-reference what the AI found against what the user required
         for (String req : job.getRequiredSkills()) {
-            boolean matchFound = foundLower.stream().anyMatch(skill -> skill.contains(req.toLowerCase()));
+            boolean matchFound = foundLower.parallelStream().anyMatch(skill -> skill.contains(req.toLowerCase()));
 
             if (matchFound) {
                 matchedSkills.add(req);

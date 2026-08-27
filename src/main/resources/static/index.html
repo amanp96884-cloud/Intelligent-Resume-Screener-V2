@@ -4,49 +4,85 @@
     <meta charset="UTF-8">
     <title>Enterprise ATS | Dynamic Batch Screener</title>
     <style>
-        :root { --brand-dark: #0F172A; --brand-primary: #2563EB; --bg-color: #F1F5F9; --surface: #FFFFFF; --border: #E2E8F0; --text-main: #334155; --text-muted: #64748B; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .navbar { width: 100%; background-color: var(--brand-dark); color: white; padding: 12px 24px; box-sizing: border-box; font-size: 0.9rem; font-weight: 500; }
-        .app-container { width: 100%; max-width: 900px; margin-top: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 50px; }
-        .panel-header { background-color: #F8FAFC; border-bottom: 1px solid var(--border); padding: 16px 24px; font-size: 1.1rem; font-weight: 600; color: var(--brand-dark); }
+        :root {
+            --brand-dark: #0F172A;
+            --brand-primary: #2563EB;
+            --bg-color: #F1F5F9;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --text-main: #334155;
+            --text-muted: #64748B;
+            --panel-bg: #F8FAFC;
+        }
+
+        [data-theme="dark"] {
+            --brand-dark: #F8FAFC;
+            --brand-primary: #3B82F6;
+            --bg-color: #0F172A;
+            --surface: #1E293B;
+            --border: #334155;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --panel-bg: #0F172A;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
+
+        .navbar { width: 100%; background-color: var(--brand-dark); color: var(--surface); padding: 12px 24px; box-sizing: border-box; font-size: 0.9rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+        .theme-toggle { background: transparent; border: 1px solid var(--border); color: inherit; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+
+        .app-container { width: 100%; max-width: 950px; margin-top: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 50px; transition: background-color 0.3s, border-color 0.3s; }
+        .panel-header { background-color: var(--panel-bg); border-bottom: 1px solid var(--border); padding: 16px 24px; font-size: 1.1rem; font-weight: 600; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
         .panel-body { padding: 24px; }
 
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); text-transform: uppercase; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; box-sizing: border-box; font-size: 0.9rem; font-family: inherit; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border); background-color: var(--surface); color: var(--text-main); border-radius: 4px; box-sizing: border-box; font-size: 0.9rem; font-family: inherit; }
         input[type="text"]:focus { outline: none; border-color: var(--brand-primary); }
 
-        .file-drop-zone { border: 1px dashed #94A3B8; background-color: #F8FAFC; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 24px; }
+        .file-drop-zone { border: 1px dashed var(--text-muted); background-color: var(--panel-bg); padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 24px; color: var(--text-main); }
 
         .btn { background-color: var(--brand-primary); color: white; border: none; padding: 10px 16px; font-size: 0.9rem; font-weight: 500; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn:hover { background-color: #1D4ED8; }
+        .btn:hover { opacity: 0.9; }
         .btn:disabled { background-color: #94A3B8; cursor: not-allowed; }
+
+        .btn-export { background-color: #10B981; width: auto; padding: 6px 12px; font-size: 0.8rem; }
+        .btn-export:hover { background-color: #059669; }
 
         #leaderboardSection { display: none; margin-top: 30px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { background-color: #F8FAFC; padding: 12px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid var(--border); }
-        td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        th { background-color: var(--panel-bg); padding: 12px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid var(--border); cursor: pointer; user-select: none; }
+        th:hover { color: var(--brand-primary); }
+        td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-main); }
 
-        .rank-cell { font-weight: 700; color: var(--brand-dark); font-size: 1.1rem; text-align: center; width: 50px; }
-        .name-cell { font-weight: 600; color: var(--brand-dark); }
+        .rank-cell { font-weight: 700; font-size: 1.1rem; text-align: center; width: 50px; }
+        .name-cell { font-weight: 600; }
         .score-cell { font-weight: 700; font-size: 1.1rem; width: 80px; text-align: right; }
 
         .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
         .tag { padding: 3px 8px; font-size: 0.75rem; font-weight: 500; border-radius: 3px; border: 1px solid; }
         .tag-success { background-color: #F0FDF4; color: #166534; border-color: #BBF7D0; }
         .tag-danger { background-color: #FEF2F2; color: #991B1B; border-color: #FECACA; }
+
+        .badge { display: inline-block; padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: 12px; text-transform: uppercase; }
+        .badge-shortlisted { background-color: #DCFCE7; color: #15803D; }
+        .badge-review { background-color: #FFEDD5; color: #C2410C; }
+        .badge-rejected { background-color: #FEE2E2; color: #B91C1C; }
+
         .loading-text { text-align: center; color: var(--text-muted); font-style: italic; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="navbar">Internal Systems | Dynamic Evaluation Module</div>
+<div class="navbar">
+    <span>Internal Systems | Dynamic Evaluation Module</span>
+    <button class="theme-toggle" onclick="toggleDarkMode()">🌓 Theme</button>
+</div>
 
 <div class="app-container">
     <div class="panel-header">Create Job Profile & Analyze</div>
 
     <div class="panel-body">
-        <!-- New Input Fields for Dynamic Skills -->
         <div class="form-group">
             <label class="form-label">Required Skills (Comma-separated)</label>
             <input type="text" id="reqInput" placeholder="e.g. Java, SQL, Data Structures, OOP">
@@ -65,16 +101,20 @@
         </div>
 
         <button class="btn" id="analyzeBtn" onclick="processBatch()">Run Batch Analysis</button>
-        <p id="loadingStatus" class="loading-text">Processing documents... please wait.</p>
+        <p id="loadingStatus" class="loading-text">Processing documents in parallel... please wait.</p>
 
         <div id="leaderboardSection">
-            <h3 style="margin-bottom: 0; color: var(--brand-dark);">Candidate Leaderboard</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <h3 style="margin: 0;">Candidate Leaderboard</h3>
+                <button class="btn btn-export" onclick="exportToCSV()">📥 Export to CSV</button>
+            </div>
             <table id="leaderboardTable">
                 <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Candidate</th>
-                    <th>Score</th>
+                    <th onclick="sortTable(0)">Rank</th>
+                    <th onclick="sortTable(1)">Candidate</th>
+                    <th onclick="sortTable(2)">Score</th>
+                    <th onclick="sortTable(3)">Status</th>
                     <th>Verified Competencies</th>
                     <th>Missing Requirements</th>
                 </tr>
@@ -86,6 +126,23 @@
 </div>
 
 <script>
+    let currentResults = [];
+
+    function toggleDarkMode() {
+        const html = document.documentElement;
+        if (html.getAttribute("data-theme") === "dark") {
+            html.removeAttribute("data-theme");
+            localStorage.setItem("theme", "light");
+        } else {
+            html.setAttribute("data-theme", "dark");
+            localStorage.setItem("theme", "dark");
+        }
+    }
+
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
+
     async function processBatch() {
         const fileInput = document.getElementById('pdfUpload');
         const reqSkills = document.getElementById('reqInput').value;
@@ -93,7 +150,6 @@
         const btn = document.getElementById('analyzeBtn');
         const status = document.getElementById('loadingStatus');
         const leaderboard = document.getElementById('leaderboardSection');
-        const tableBody = document.getElementById('tableBody');
 
         const files = fileInput.files;
         if (files.length === 0) {
@@ -104,13 +160,11 @@
         btn.disabled = true;
         status.style.display = "block";
         leaderboard.style.display = "none";
-        tableBody.innerHTML = "";
 
         try {
             const promises = Array.from(files).map(async (file) => {
                 const formData = new FormData();
                 formData.append("file", file);
-                // Append the dynamic skills typed by the user to the web request
                 formData.append("required", reqSkills);
                 formData.append("preferred", prefSkills);
 
@@ -121,27 +175,10 @@
                 return await response.json();
             });
 
-            const results = await Promise.all(promises);
-            results.sort((a, b) => b.finalScore - a.finalScore);
+            currentResults = await Promise.all(promises);
+            currentResults.sort((a, b) => b.finalScore - a.finalScore);
 
-            results.forEach((data, index) => {
-                const score = Math.round(data.finalScore);
-                let scoreColor = score >= 70 ? "#166534" : (score >= 40 ? "#9A3412" : "#EF4444");
-
-                const matchedHTML = data.matchedSkills.map(s => `<span class="tag tag-success">${s}</span>`).join('');
-                const missingHTML = data.missingSkills.map(s => `<span class="tag tag-danger">${s}</span>`).join('');
-
-                tableBody.innerHTML += `
-                    <tr>
-                        <td class="rank-cell">#${index + 1}</td>
-                        <td class="name-cell">${data.candidateName}</td>
-                        <td class="score-cell" style="color: ${scoreColor}">${score}%</td>
-                        <td><div class="tag-list">${matchedHTML || '-'}</div></td>
-                        <td><div class="tag-list">${missingHTML || '-'}</div></td>
-                    </tr>
-                `;
-            });
-
+            renderTable();
             leaderboard.style.display = "block";
 
         } catch (error) {
@@ -150,6 +187,89 @@
             btn.disabled = false;
             status.style.display = "none";
         }
+    }
+
+    function renderTable() {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = "";
+
+        currentResults.forEach((data, index) => {
+            const score = Math.round(data.finalScore);
+
+            let badgeClass = "badge-rejected";
+            let badgeText = "Rejected";
+            if (score >= 70) {
+                badgeClass = "badge-shortlisted";
+                badgeText = "Shortlisted";
+            } else if (score >= 40) {
+                badgeClass = "badge-review";
+                badgeText = "Under Review";
+            }
+
+            const matchedHTML = data.matchedSkills.map(s => `<span class="tag tag-success">${s}</span>`).join('');
+            const missingHTML = data.missingSkills.map(s => `<span class="tag tag-danger">${s}</span>`).join('');
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td class="rank-cell">#${index + 1}</td>
+                    <td class="name-cell">${data.candidateName}</td>
+                    <td class="score-cell">${score}%</td>
+                    <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+                    <td><div class="tag-list">${matchedHTML || '-'}</div></td>
+                    <td><div class="tag-list">${missingHTML || '-'}</div></td>
+                </tr>
+            `;
+        });
+    }
+
+    let sortDirection = false;
+    function sortTable(columnIndex) {
+        sortDirection = !sortDirection;
+        currentResults.sort((a, b) => {
+            let valA, valB;
+            if (columnIndex === 0 || columnIndex === 2) {
+                valA = columnIndex === 2 ? a.finalScore : currentResults.indexOf(a);
+                valB = columnIndex === 2 ? b.finalScore : currentResults.indexOf(b);
+            } else if (columnIndex === 1) {
+                valA = a.candidateName.toLowerCase();
+                valB = b.candidateName.toLowerCase();
+            } else {
+                return 0;
+            }
+
+            if (valA < valB) return sortDirection ? -1 : 1;
+            if (valA > valB) return sortDirection ? 1 : -1;
+            return 0;
+        });
+        renderTable();
+    }
+
+    function exportToCSV() {
+        if (currentResults.length === 0) {
+            alert("No data available to export.");
+            return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,Rank,Candidate Name,Final Score (%),Status,Matched Skills,Missing Skills\n";
+
+        currentResults.forEach((data, index) => {
+            const rank = index + 1;
+            const name = `"${data.candidateName}"`;
+            const score = Math.round(data.finalScore);
+            const status = score >= 70 ? "Shortlisted" : (score >= 40 ? "Under Review" : "Rejected");
+            const matched = `"${data.matchedSkills.join(', ')}"`;
+            const missing = `"${data.missingSkills.join(', ')}"`;
+
+            csvContent += `${rank},${name},${score},${status},${matched},${missing}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "candidate_leaderboard_report.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 </body>
