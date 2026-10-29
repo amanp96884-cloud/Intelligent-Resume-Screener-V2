@@ -7,3 +7,76 @@ Extensive knowledge of <START:skill> Data Structures <END> and <START:skill> OOP
 Proficient with <START:skill> Git <END> for version control .
 Designed user interfaces in <START:skill> Figma <END> and <START:skill> React <END> .
 Familiar with <START:skill> C++ <END> and <START:skill> Node.js <END> .
+Languages : <START:skill> Java <END> , <START:skill> SQL <END>
+Languages : <START:skill> Python <END> , <START:skill> C++ <END> , <START:skill> JavaScript <END>
+Programming Languages : <START:skill> C <END> , <START:skill> Java <END> , <START:skill> Python <END>
+Backend : <START:skill> Spring Boot <END> , <START:skill> Spring Data JPA <END> , <START:skill> REST APIs <END> , <START:skill> JSON <END>
+Backend : <START:skill> Node.js <END> , <START:skill> Express.js <END> , <START:skill> REST APIs <END>
+Frontend : <START:skill> HTML <END> , <START:skill> CSS <END> , <START:skill> JavaScript <END> , <START:skill> React <END>
+Frontend : <START:skill> Angular <END> , <START:skill> TypeScript <END> , <START:skill> Tailwind CSS <END>
+Databases : <START:skill> MySQL <END> , <START:skill> H2 <END>
+Databases : <START:skill> PostgreSQL <END> , <START:skill> MongoDB <END> , <START:skill> Redis <END>
+Tools : <START:skill> Git <END> , <START:skill> GitHub <END> , <START:skill> Maven <END> , <START:skill> IntelliJ IDEA <END>
+Tools : <START:skill> Docker <END> , <START:skill> Jenkins <END> , <START:skill> Postman <END> , <START:skill> VS Code <END>
+Cloud : <START:skill> AWS <END> , <START:skill> Azure <END> , <START:skill> Google Cloud <END>
+Core Java : <START:skill> OOP <END> , <START:skill> Collections <END> , <START:skill> Exception Handling <END> , <START:skill> Multithreading <END> , <START:skill> Streams <END>
+Concepts : <START:skill> Data Structures <END> , <START:skill> Algorithms <END> , <START:skill> OOP <END> , <START:skill> DBMS <END>
+Concepts : <START:skill> Microservices <END> , <START:skill> REST APIs <END> , <START:skill> Design Patterns <END>
+Concepts : <START:skill> NER <END> , <START:skill> TF-IDF <END> , <START:skill> Cosine Similarity <END>
+Technical Skills : <START:skill> Python <END> , <START:skill> Pandas <END> , <START:skill> NumPy <END> , <START:skill> Scikit-learn <END>
+Technical Skills : <START:skill> Machine Learning <END> , <START:skill> TensorFlow <END> , <START:skill> Deep Learning <END>
+Technical Skills : <START:skill> Linux <END> , <START:skill> Git <END> , <START:skill> Bash <END>
+Skills : <START:skill> Java <END> | <START:skill> Spring Boot <END> | <START:skill> MySQL <END> | <START:skill> Docker <END>
+Skills : <START:skill> Python <END> | <START:skill> Django <END> | <START:skill> Flask <END> | <START:skill> PostgreSQL <END>
+Skills : <START:skill> React <END> | <START:skill> Node.js <END> | <START:skill> MongoDB <END> | <START:skill> Express.js <END>
+Skills : <START:skill> Hibernate <END> , <START:skill> JUnit <END> , <START:skill> Mockito <END>
+Skills : <START:skill> Kubernetes <END> , <START:skill> Docker <END> , <START:skill> Terraform <END>
+Skills : <START:skill> Power BI <END> , <START:skill> Tableau <END> , <START:skill> Excel <END>
+Skills : <START:skill> Kotlin <END> , <START:skill> Android <END> , <START:skill> Firebase <END>
+Skills : <START:skill> C# <END> , <START:skill> .NET <END> , <START:skill> SQL Server <END>
+Skills : <START:skill> PHP <END> , <START:skill> Laravel <END> , <START:skill> MySQL <END>
+Skills : <START:skill> Figma <END> , <START:skill> Adobe XD <END> , <START:skill> Photoshop <END>
+Built a REST API using <START:skill> Spring Boot <END> and <START:skill> MySQL <END> .
+Developed a microservice with <START:skill> Spring Boot <END> and <START:skill> Spring Data JPA <END> to automate resume parsing .
+Implemented concurrent processing using <START:skill> Streams <END> and <START:skill> Multithreading <END> .
+Used <START:skill> Apache PDFBox <END> to extract text from PDF files .
+Used <START:skill> OpenNLP <END> for named entity recognition .
+Stored data using <START:skill> Spring Data JPA <END> and <START:skill> H2 <END> .
+Containerized the application with <START:skill> Docker <END> and deployed it on <START:skill> AWS <END> .
+Created a responsive website using <START:skill> HTML <END> , <START:skill> CSS <END> and <START:skill> JavaScript <END> .
+Built a single page application with <START:skill> React <END> and <START:skill> Redux <END> .
+Wrote unit tests with <START:skill> JUnit <END> and <START:skill> Mockito <END> .
+Managed source code using <START:skill> Git <END> and <START:skill> GitHub <END> .
+Automated the build process with <START:skill> Maven <END> and <START:skill> Jenkins <END> .
+Designed a relational schema and wrote complex queries in <START:skill> SQL <END> .
+Optimized slow queries in <START:skill> PostgreSQL <END> using indexes .
+Trained a classification model using <START:skill> Python <END> and <START:skill> Scikit-learn <END> .
+Built a recommendation engine with <START:skill> TensorFlow <END> and <START:skill> Keras <END> .
+Analyzed data with <START:skill> Pandas <END> and visualized results using <START:skill> Matplotlib <END> .
+Implemented authentication with <START:skill> JWT <END> and <START:skill> OAuth <END> .
+Integrated third party services through <START:skill> REST APIs <END> and <START:skill> JSON <END> .
+Applied <START:skill> TF-IDF <END> and <START:skill> Cosine Similarity <END> to rank candidates .
+Solved over 300 problems on <START:skill> Data Structures <END> and <START:skill> Algorithms <END> .
+Strong understanding of <START:skill> OOP <END> concepts and <START:skill> Collections <END> in <START:skill> Java <END> .
+Hands on experience with <START:skill> Linux <END> and <START:skill> Shell Scripting <END> .
+Worked with <START:skill> MongoDB <END> and <START:skill> Redis <END> for caching .
+Developed backend services in <START:skill> Node.js <END> using <START:skill> Express.js <END> .
+Experience in <START:skill> Angular <END> and <START:skill> TypeScript <END> .
+Built mobile apps using <START:skill> Flutter <END> and <START:skill> Dart <END> .
+Proficient in <START:skill> C++ <END> and <START:skill> Python <END> for competitive programming .
+Familiar with <START:skill> Kubernetes <END> and <START:skill> CI/CD <END> pipelines .
+Deployed applications on <START:skill> AWS <END> using <START:skill> EC2 <END> and <START:skill> S3 <END> .
+Bhopal , Madhya Pradesh , India
+Bachelor of Technology in Computer Science and Engineering
+CGPA : 7.65 / 10
+Expected graduation in 2027 from LNCT Bhopal .
+Led a team of four students in a college hackathon .
+Volunteered to organize cultural events at school .
+Certified by Microsoft and IBM .
+I enjoy reading books and playing cricket .
+Responsible for communicating with clients and writing documentation .
+Worked as an intern and improved team productivity by 20 % .
+EDUCATION
+PROJECTS
+CERTIFICATIONS
+TECHNICAL SKILLS
